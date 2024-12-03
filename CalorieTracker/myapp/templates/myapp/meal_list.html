@@ -1,0 +1,43 @@
+{% extends 'myapp/base.html' %}
+{% block content %}
+<h1 class="text-center">Meal List</h1>
+<form method="get" class="mb-4">
+    <input type="text" name="search" placeholder="Search meals..." class="form-control">
+    <button type="submit" class="btn btn-primary mt-2">Search</button>
+</form>
+<div class="progress mb-4">
+    <div
+        class="progress-bar"
+        role="progressbar"
+        style="width: {{ progress_percentage }}%;"
+        aria-valuenow="{{ total_calories }}"
+        aria-valuemin="0"
+        aria-valuemax="2000">
+        {{ total_calories }} / 2000 kcal
+    </div>
+</div>
+<h2>Total Calories: <span class="badge bg-info">{{ total_calories }} kcal</span></h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Meal Name</th>
+            <th>Calories</th>
+            <th>Date</th>
+            <th>Category</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for meal in meals %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ meal.name }}</td>
+                <td>{{ meal.calories }}</td>
+                <td>{{ meal.date }}</td>
+                <td>{{ meal.category }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'add_meal' %}" class="btn btn-primary">Add a New Meal</a>
+{% endblock %}

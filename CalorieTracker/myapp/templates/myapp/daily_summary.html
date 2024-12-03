@@ -1,0 +1,24 @@
+{% extends 'myapp/base.html' %}
+{% block content %}
+<h1 class="text-center">Today's Summary</h1>
+<h2>Total Calories: <span class="badge bg-success">{{ total_calories }} kcal</span></h2>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Meal Name</th>
+            <th>Calories</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for meal in meals %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ meal.name }}</td>
+                <td>{{ meal.calories }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'meal_list' %}" class="btn btn-secondary">Back to Meal List</a>
+{% endblock %}
