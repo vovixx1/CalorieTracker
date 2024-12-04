@@ -1,43 +1,59 @@
 {% extends 'myapp/base.html' %}
+
 {% block content %}
-<h1 class="text-center">Meal List</h1>
-<form method="get" class="mb-4">
-    <input type="text" name="search" placeholder="Search meals..." class="form-control">
-    <button type="submit" class="btn btn-primary mt-2">Search</button>
-</form>
-<div class="progress mb-4">
-    <div
-        class="progress-bar"
-        role="progressbar"
-        style="width: {{ progress_percentage }}%;"
-        aria-valuenow="{{ total_calories }}"
-        aria-valuemin="0"
-        aria-valuemax="2000">
-        {{ total_calories }} / 2000 kcal
+<h1 class="text-center mb-4">Welcome {{ user.first_name }}!</h1>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <h5 class="card-title">Your Calorie Goal: <strong>{{ calorie_goal }}</strong> kcal</h5>
+        <h5 class="card-text">Total Calories Consumed: <strong>{{ total_calories }}</strong> kcal</h5>
+        <div class="progress mt-3">
+            <div
+                class="progress-bar {{ progress_class }}"
+                role="progressbar"
+                style="width: {{ percentage_consumed }}%;"
+                aria-valuenow="{{ total_calories }}"
+                aria-valuemin="0"
+                aria-valuemax="{{ calorie_goal }}">
+                {{ percentage_consumed|floatformat:2 }}%
+            </div>
+        </div>
+        <a href="{% url 'add_meal' %}" class="btn btn-primary mt-3">Add Meal</a>
     </div>
 </div>
-<h2>Total Calories: <span class="badge bg-info">{{ total_calories }} kcal</span></h2>
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>#</th>
-            <th>Meal Name</th>
-            <th>Calories</th>
-            <th>Date</th>
-            <th>Category</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for meal in meals %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ meal.name }}</td>
-                <td>{{ meal.calories }}</td>
-                <td>{{ meal.date }}</td>
-                <td>{{ meal.category }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-<a href="{% url 'add_meal' %}" class="btn btn-primary">Add a New Meal</a>
+
+<div class="mt-4">
+    <h2 class="mb-3">Your Meals</h2>
+    {% if meals %}
+        <div class="row">
+            {% for meal in meals %}
+            <div class="col-md-4">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ meal.name }}</h5>
+                        <p class="card-text">Type: {{ meal.meal_type }}</p>
+                        <p class="card-text">Calories: {{ meal.calories }} kcal</p>
+                        <p class="card-text">Date: {{ meal.date }}</p>
+                        <form method="post" action="{% url 'delete_meal' meal.id %}">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm">Remove</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-muted">You haven't added any meals yet. Click "Add Meal" to get started!</p>
+    {% endif %}
+</div>
+
+<form method="post" class="mt-5">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="calorie_goal" class="form-label">Set Calorie Goal</label>
+        <input type="number" class="form-control" id="calorie_goal" name="calorie_goal" placeholder="Enter your calorie goal">
+    </div>
+    <button type="submit" class="btn btn-primary">Update Goal</button>
+</form>
 {% endblock %}
