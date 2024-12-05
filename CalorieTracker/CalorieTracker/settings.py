@@ -78,13 +78,15 @@ WSGI_APPLICATION = 'CalorieTracker.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres',  # Name of your database
+        'NAME': 'calorie_tracker',  # Name of your database
         'USER': 'postgres',       # PostgreSQL username
         'PASSWORD': 'vova',   # PostgreSQL password
         'HOST': 'localhost',           # Or the address of your PostgreSQL server
         'PORT': '5432',                # Default PostgreSQL port
     }
 }
+
+###
 
 
 
